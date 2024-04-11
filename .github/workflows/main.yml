@@ -1,0 +1,18 @@
+name: News Mongo
+on:
+  schedule:
+    - cron: '*/10 * * * *'  # Runs every 10 minutes
+  workflow_dispatch:
+    
+jobs:
+  cron:
+    runs-on: ubuntu-latest
+    steps:
+      - name: News Mongo 
+        run: |
+         status=$(curl -o /dev/null -s -w "%{http_code}" -m 600 ${{ secrets.URL }})
+         echo "Status code: $status"
+         if [ "$status" -ne 200 ]; then
+           echo "URL returned status code other than 200"
+           exit 1
+         fi
